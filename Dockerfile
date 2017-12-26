@@ -1,7 +1,7 @@
-FROM wouterds/rpi-nginx:latest
-MAINTAINER torkildr
+FROM tfatykhov/rpi-nginx:latest
+MAINTAINER Timur fatykhov [github.com/tfatykhov]
 
-RUN [ "cross-build-start" ]
+# RUN [ "cross-build-start" ]
 
 # Packages
 RUN apt-get update \
@@ -14,9 +14,10 @@ RUN apt-get update \
 
 # Install acme-tiny for let's-encrypt
 RUN mkdir -p /opt
-RUN wget -O /tmp/acme-tiny.zip https://github.com/diafygi/acme-tiny/archive/5a7b4e79bc9bd5b51739c0d8aaf644f62cc440e6.zip
+RUN wget -O /tmp/acme-tiny.zip https://codeload.github.com/diafygi/acme-tiny/zip/master
+# https://github.com/diafygi/acme-tiny/archive/5a7b4e79bc9bd5b51739c0d8aaf644f62cc440e6.zip
 RUN unzip -d /opt /tmp/acme-tiny.zip
-RUN ln -s /opt/acme-tiny-5a7b4e79bc9bd5b51739c0d8aaf644f62cc440e6 /opt/acme-tiny
+RUN ln -s /opt/acme-tiny-master /opt/acme-tiny
 RUN rm /tmp/acme-tiny.zip
 
 # Install certificate updating script
@@ -41,9 +42,8 @@ VOLUME /acme-challenge
 COPY configure-hosts.sh /
 COPY docker-entrypoint.sh /
 
-RUN [ "cross-build-end" ]
+# RUN [ "cross-build-end" ]
 
 EXPOSE 80 443
 
 CMD /docker-entrypoint.sh
-

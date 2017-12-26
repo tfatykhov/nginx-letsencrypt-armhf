@@ -23,11 +23,10 @@ update_cert() {
       else
         altnames="${altnames},${altname}"
       fi
-    done
 
     info "Checking expiry of ${domain} chained cert"
-    if openssl x509 -checkend 2419200 -noout -in /etc/nginx/certs/${domain}-chained.pem; then
-        info "Chained cert for ${domain} is good for at least 28 days"
+    if openssl x509 -checkend 172800 -noout -in /etc/nginx/certs/${domain}-chained.pem; then
+        info "Chained cert for ${domain} is good for at least 2 days"
         continue
     fi
 
@@ -55,6 +54,7 @@ update_cert() {
     info "Signalling nginx to reload config"
     /configure-hosts.sh
     nginx -s reload
+   done
 }
 
 if [ ! -z "$NO_CERT_UPDATES" ]
